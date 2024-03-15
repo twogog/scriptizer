@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Complex manager</title>
+</head>
+
+<body>
+    <h1>Обнови свои скрипты!</h1>
+
+    <form>
+        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+        <label for="vehicle1"> Я велосипед</label><br>
+        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+        <label for="vehicle2"> Я машина</label><br>
+        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+        <label for="vehicle3"> Я лодка</label><br>
+        <br>
+        <input type="submit" value="Обновить">
+    </form>
+
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+</body>
+
+</html>

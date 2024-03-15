@@ -1,0 +1,30 @@
+{
+  "name": "complex-manager",
+  "version": "1.0.0",
+  "description": "manager",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "watch-controller": "webpack --name controller --watch",
+    "watch-administrator": "webpack --name administrator --watch",
+    "watch-collector": "webpack --name collector --watch",
+    "watch-creditinfo": "webpack --name creditinfo --watch",
+    "watch-creditor": "webpack --name creditor --watch",
+    "watch-rubusiness": "webpack --name ru-business --watch",
+    "watch-ecommerce": "webpack --name e-commerce --watch",
+    "dev-controller": "nodemon index controller local --ignore common/*/public/*",
+    "dev-administrator": "nodemon index administrator local --ignore common/*/public/*",
+    "dev-collector": "nodemon index collector local --ignore common/*/public/*",
+    "dev-creditinfo": "nodemon index creditinfo local --ignore common/*/public/*",
+    "dev-creditor": "nodemon index creditor local --ignore common/*/public/*",
+    "dev-ecommerce": "nodemon index e-commerce local --ignore common/*/public/*",
+    "dev-rubusiness": "nodemon index ru-business local --ignore common/*/public/*",
+    "update-tasks": "node update-tasks"
+  },
+  "author": "twogog",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.3.0",
+    "electron": "^29.1.4"
+  }
+}
