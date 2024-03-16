@@ -3,6 +3,10 @@ const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('node:path');
 const fs = require('fs');
 
+let parentDir = app.isPackaged
+  ? __dirname.split('\\').slice(0, -3).join('\\')
+  : __dirname;
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -25,8 +29,9 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   ipcMain.handle('getTasks', () => {
-    const jsonPath = path.join(__dirname, 'package.json');
+    const jsonPath = path.join(parentDir, 'package.json');
     let json;
+
     if (fs.existsSync(jsonPath)) {
       json = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
     }
@@ -37,6 +42,8 @@ app.whenReady().then(() => {
       );
     return filteredKeys || [];
   });
+
+  ipcMain.handle('loger', () => __dirname);
 
   ipcMain.handle('writeTasks', (event, tasks) => {
     const initialBuild = {
@@ -56,7 +63,7 @@ app.whenReady().then(() => {
 
     initialBuild.tasks.push(combiner);
 
-    const filePath = path.join(__dirname, '.vscode', 'tasks.json');
+    const filePath = path.join(parentDir, '.vscode', 'tasks.json');
     if (fs.existsSync(filePath))
       fs.writeFileSync(filePath, JSON.stringify(initialBuild, undefined, 2));
   });

@@ -14,7 +14,8 @@
   form.innerHTML = innerString +=
     '<input type="submit" value="Обновить"></input>';
 
-  form.addEventListener('submit', async () => {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
     await window.api.writeTasks(allTasks);
   });
 })();
