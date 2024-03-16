@@ -11,17 +11,18 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
 
+  mainWindow.setMenu(null);
   // and load the index.html of the app.
   mainWindow.loadFile('index.html');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -64,7 +65,7 @@ app.whenReady().then(() => {
     initialBuild.tasks.push(combiner);
 
     const filePath = path.join(parentDir, '.vscode', 'tasks.json');
-    if (fs.existsSync(filePath))
+    if (fs.existsSync(path.dirname(filePath)))
       fs.writeFileSync(filePath, JSON.stringify(initialBuild, undefined, 2));
   });
 
