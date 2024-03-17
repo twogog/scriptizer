@@ -6,7 +6,10 @@
   const success = document.querySelector('.success');
 
   let searchTasks = [];
-  let cache = allTasks.join();
+  const caches = {
+    fileCache: '',
+    htmlCache: allTasks.join(),
+  };
 
   tasksContainer.innerHTML = makeTasksHtmlStr(allTasks);
   tasksOuter.innerHTML += `
@@ -29,11 +32,14 @@
     e.preventDefault();
     if (isAnimate) return;
 
-    currentTasks = [];
+    const currentTasks = [];
     tasks.forEach((task) => {
       task.checked && currentTasks.push(task.value);
     });
+
     if (!currentTasks.length) return;
+    const isSame = controlCache(currentTasks, caches, 'fileCache');
+    if (isSame) return;
     await window.api.writeTasks(currentTasks);
 
     const animation = success.animate(
@@ -61,9 +67,8 @@
       return complexName.includes(searchValue);
     });
 
-    const newCache = searchTasks.join();
-    if (newCache === cache) return;
-    cache = newCache;
+    const isSame = controlCache(searchTasks, caches, 'htmlCache');
+    if (isSame) return;
     if (searchValue === '') searchTasks = allTasks;
 
     tasksOuter.querySelector('div').innerHTML = makeTasksHtmlStr(searchTasks);
@@ -81,4 +86,11 @@ function makeTasksHtmlStr(tasks) {
       `;
     return init;
   }, '');
+}
+
+function controlCache(currentTasks, caches, key) {
+  const newCache = currentTasks.join();
+  if (newCache === caches[key]) return true;
+  caches[key] = newCache;
+  return false;
 }
