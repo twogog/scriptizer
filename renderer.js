@@ -1,28 +1,23 @@
 (async () => {
   const allTasks = await window.api.getTasks();
-  const form = document.querySelector('form');
+  const tasksOuter = document.querySelector('.tasks');
+  const tasksContainer = tasksOuter.querySelector('.grid-container');
+  const search = document.querySelector('.search');
   const success = document.querySelector('.success');
 
-  let innerString = '';
-  allTasks.forEach((v) => {
-    innerString += `
-    <div>
-      <input type="checkbox" id="${v}" name="${v}" value="${v}">
-      <label for="${v}">${v}</label>
-    </div>
-`;
-  });
+  let searchTasks = [];
+  let cache = allTasks.join();
 
-  form.querySelector('div').innerHTML = innerString;
-  form.innerHTML += `
+  tasksContainer.innerHTML = makeTasksHtmlStr(allTasks);
+  tasksOuter.innerHTML += `
     <div class="flex-container">
       <input type="button" value="invert all"></input>
       <input type="submit" value="update"></input>
     </div>
-    `;
+  `;
 
-  const tasks = document.querySelectorAll('input[type="checkbox"]');
-  form.addEventListener('click', async (e) => {
+  let tasks = tasksOuter.querySelectorAll('input[type="checkbox"]');
+  tasksOuter.addEventListener('click', async (e) => {
     e.target.value === 'invert all' &&
       tasks.forEach((task) => {
         task.checked ? (task.checked = false) : (task.checked = true);
@@ -30,7 +25,7 @@
   });
 
   let isAnimate = false;
-  form.addEventListener('submit', async (e) => {
+  tasksOuter.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (isAnimate) return;
 
@@ -53,4 +48,37 @@
       success.style.zIndex = -10;
     };
   });
+
+  search.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(search);
+    const searchValue = formData.get('search');
+    search.reset();
+
+    searchTasks = allTasks.filter((v) => {
+      const complexName = v.replace(/.+?-/, '');
+      return complexName.includes(searchValue);
+    });
+
+    const newCache = searchTasks.join();
+    if (newCache === cache) return;
+    cache = newCache;
+    if (searchValue === '') searchTasks = allTasks;
+
+    tasksOuter.querySelector('div').innerHTML = makeTasksHtmlStr(searchTasks);
+    tasks = tasksOuter.querySelectorAll('input[type="checkbox"]');
+  });
 })();
+
+function makeTasksHtmlStr(tasks) {
+  return tasks.reduce((init, v) => {
+    init += `
+        <div>
+          <input type="checkbox" id="${v}" name="${v}" value="${v}">
+          <label for="${v}">${v}</label>
+        </div>
+      `;
+    return init;
+  }, '');
+}

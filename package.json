@@ -6,8 +6,7 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "watch-test": "test"
+    "make": "electron-forge make"
   },
   "author": "twogog",
   "license": "ISC",
