@@ -54,5 +54,6 @@ input[type='button'] {
   color: green;
   font-size: 100px;
   opacity: 0;
+  user-select: none;
   z-index: -10;
 }

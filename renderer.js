@@ -29,10 +29,10 @@
       });
   });
 
-  let decTimer, incTimer;
+  let isAnimate = false;
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (decTimer || incTimer) return;
+    if (isAnimate) return;
 
     currentTasks = [];
     tasks.forEach((task) => {
@@ -41,23 +41,16 @@
     if (!currentTasks.length) return;
     await window.api.writeTasks(currentTasks);
 
-    let opacity = 0;
-    incTimer = setInterval(() => {
-      opacity += 1;
-      success.style.opacity = opacity + '%';
-      if (opacity === 100) {
-        clearInterval(incTimer);
-        incTimer = null;
+    const animation = success.animate(
+      [{opacity: 1, offset: 0.5}, {opacity: 0}],
+      {duration: 2000}
+    );
 
-        decTimer = setInterval(() => {
-          opacity -= 1;
-          success.style.opacity = opacity + '%';
-          if (opacity === 0) {
-            clearInterval(decTimer);
-            decTimer = null;
-          }
-        }, 10);
-      }
-    }, 10);
+    isAnimate = true;
+    success.style.zIndex = 10;
+    animation.onfinish = () => {
+      isAnimate = false;
+      success.style.zIndex = -10;
+    };
   });
 })();
